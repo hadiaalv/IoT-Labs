@@ -6,9 +6,9 @@ import utime as time
 from machine import Pin, I2C, Timer
 import ssd1306
 
-WIFI_SSID = 'Hadia'
-WIFI_PASS = '8777hadia'
-BLYNK_AUTH = "fuuW_LE190zpx8Comk1b4HK4v6Z2ubhH"
+WIFI_SSID = 'Hadia' #Hotspot name
+WIFI_PASS = '8777hadia' #Hotspot password
+BLYNK_AUTH = "fuuW_LE190zpx8Comk1b4HK4v6Z2ubhH" #auth code
 
 print("Connecting to WiFi network '{}'".format(WIFI_SSID))
 wifi = network.WLAN(network.STA_IF)

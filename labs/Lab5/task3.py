@@ -9,7 +9,7 @@ from neopixel import NeoPixel
 #from machine import Pin, I2C, Timer
 import ssd1306
 
-WIFI_SSID = 'Hadia'
+WIFI_SSID = 'Hadia'#Hotspot name
 WIFI_PASS = '8777hadia'
 BLYNK_AUTH = "fuuW_LE190zpx8Comk1b4HK4v6Z2ubhH"
 

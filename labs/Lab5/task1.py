@@ -8,7 +8,7 @@ from neopixel import NeoPixel
 #from machine import Pin, I2C, Timer
 import ssd1306
 
-WIFI_SSID = 'Hadia'
+WIFI_SSID = 'Hadia'#Hotspot name
 WIFI_PASS = '8777hadia'
 BLYNK_AUTH = "fuuW_LE190zpx8Comk1b4HK4v6Z2ubhH"
 
@@ -17,7 +17,7 @@ wifi = network.WLAN(network.STA_IF)
 wifi.active(True)
 wifi.connect(WIFI_SSID, WIFI_PASS)
 while not wifi.isconnected():
-    time.sleep(1)
+    time.sleep(1)	
     print('WiFi connect retry ...')
 print('WiFi IP:', wifi.ifconfig()[0])
 

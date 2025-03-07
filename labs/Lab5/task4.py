@@ -7,7 +7,7 @@ import utime as time
 from machine import Pin
 from neopixel import NeoPixel
 
-WIFI_SSID = 'Hadia'
+WIFI_SSID = 'Hadia'#Hotspot name
 WIFI_PASS = '8777hadia'
 BLYNK_AUTH = "fuuW_LE190zpx8Comk1b4HK4v6Z2ubhH"
 

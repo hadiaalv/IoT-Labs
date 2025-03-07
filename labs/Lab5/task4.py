@@ -7,7 +7,7 @@ import utime as time
 from machine import Pin
 from neopixel import NeoPixel
 
-WIFI_SSID = 'Hadia'#Hotspot name
+WIFI_SSID ='Hadia'
 WIFI_PASS = '8777hadia'
 BLYNK_AUTH = "fuuW_LE190zpx8Comk1b4HK4v6Z2ubhH"
 
@@ -19,7 +19,6 @@ while not wifi.isconnected():
     time.sleep(1)
     print('WiFi connect retry ...')
 print('WiFi IP:', wifi.ifconfig()[0])
-
 print("Connecting to Blynk server...")
 blynk = blynklib.Blynk(BLYNK_AUTH)
 
@@ -40,20 +39,50 @@ b = 0
 @blynk.on("V0")  # Red Slider
 def v0_handler(value):
     global r
-    r = int(value[0])
-    set_color(r, g, b)
+    if value and value[0].isdigit():  # Ensure value is valid
+        r = int(value[0])
+        set_color(r, g, b)
 
 @blynk.on("V1")  # Green Slider
 def v1_handler(value):
     global g
-    g = int(value[0])
-    set_color(r, g, b)
+    rint("Connecting to Blynk server...")
+blynk = blynklib.Blynk(BLYNK_AUTH)
+
+# Define the pin connected to the NeoPixel
+pin = Pin(48, Pin.OUT)
+np = NeoPixel(pin, 1)
+
+def set_color(r, g, b):
+    np[0] = (r, g, b)
+    np.write()
+
+# RGB Values
+r = 0
+g = 0
+b = 0
+
+# Blynk Handlers for Virtual Pins
+@blynk.on("V0")  # Red Slider
+def v0_handler(value):
+    global r
+    if value and value[0].isdigit():  # Ensure value is valid
+        r = int(value[0])
+        set_color(r, g, b)
+
+@blynk.on("V1")  # Green Slider
+def v1_handler(value):
+    global g
+    if value and value[0].isdigit():
+        g = int(value[0])
+        set_color(r, g, b)
 
 @blynk.on("V2")  # Blue Slider
 def v2_handler(value):
     global b
-    b = int(value[0])
-    set_color(r, g, b)
+    if value and value[0].isdigit():
+        b = int(value[0])
+        set_color(r, g, b)
 
 @blynk.on("connected")
 def blynk_connected():
@@ -67,4 +96,3 @@ def blynk_disconnected():
 # Main Loop
 while True:
     blynk.run()
-

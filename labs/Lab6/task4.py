@@ -3,7 +3,6 @@
 from microdot import Microdot, Response
 from machine import Pin
 from neopixel import NeoPixel
-
 # Define the pin connected to the NeoPixel
 pin = Pin(48, Pin.OUT)
 np = NeoPixel(pin, 1)  # 1 NeoPixel

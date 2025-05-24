@@ -4,8 +4,8 @@
 #include <time.h>
 
 // WiFi Credentials
-const char* ssid = "Shaham";
-const char* password = "abcd1234";
+const char* ssid = "Hadia";
+const char* password = "hadia098";
 
 // Firebase Configuration
 const String FIREBASE_HOST = "lab11-firebase-8fb44-default-rtdb.firebaseio.com";

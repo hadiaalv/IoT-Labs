@@ -1,12 +1,11 @@
 #include <WiFi.h>
 #include <HTTPClient.h>
 #include <DHT.h>
-#include <WiFiUdp.h>
-#include <NTPClient.h>
+#include <time.h>
 
 // WiFi Credentials
-const char* ssid = "Shaham";
-const char* password = "abcd1234";
+const char* ssid = "NTU FSD";
+const char* password = "";
 
 // Firebase Configuration
 const String FIREBASE_HOST = "lab11-firebase-8fb44-default-rtdb.firebaseio.com";
@@ -26,10 +25,6 @@ DHT dht(DHTPIN, DHTTYPE);
 unsigned long lastSendTime = 0;
 unsigned long lastReadTime = 0;
 
-// NTP Client setup
-WiFiUDP ntpUDP;
-NTPClient timeClient(ntpUDP, "pool.ntp.org", 5 * 3600, 60000);  // UTC+5 for Pakistan
-
 void setup() {
   Serial.begin(115200);
   Serial.println("\nESP32-S3 DHT11 Firebase Monitor");
@@ -37,16 +32,18 @@ void setup() {
   initDHT();
   connectWiFi();
 
-  timeClient.begin();
-  timeClient.update();
+  // Configure time (UTC+5 for Pakistan)
+  configTime(5 * 3600, 0, "pool.ntp.org");
+  setenv("TZ", "PKT-5", 1);  // Set TZ for Asia/Karachi
+  tzset();  // Apply timezone
+
+  delay(2000); // Let time sync
 }
 
 void loop() {
   if (WiFi.status() != WL_CONNECTED) {
     connectWiFi();
   }
-
-  timeClient.update();  // keep NTP time updated
 
   if (millis() - lastReadTime >= SENSOR_DELAY) {
     float temp, hum;
@@ -116,30 +113,21 @@ void sendToFirebase(float temp, float humidity) {
   HTTPClient http;
   String url = "https://" + FIREBASE_HOST + FIREBASE_PATH + "?auth=" + FIREBASE_AUTH;
 
-  // Get epoch time and convert to structured time
-  time_t rawTime = timeClient.getEpochTime();
-  struct tm* timeinfo = localtime(&rawTime);
+  time_t now = time(nullptr);
+  struct tm* timeinfo = localtime(&now);
 
-  // Format time as 12-hour without leading zero (e.g., 3:05)
-  int hour = timeinfo->tm_hour;
-  int minute = timeinfo->tm_min;
-  String hour12 = String((hour % 12 == 0) ? 12 : hour % 12);
-  if (minute < 10) {
-    hour12 += ":0" + String(minute);
-  } else {
-    hour12 += ":" + String(minute);
-  }
+  char timeStr[6];
+  char dateStr[11];
 
-  // Format date as DD-MM-YYYY
-  String dateStr = String(timeinfo->tm_mday) + "-" +
-                   String(timeinfo->tm_mon + 1) + "-" +
-                   String(timeinfo->tm_year + 1900);
+  // Format: HH:MM (12-hour) and DD-MM-YYYY
+  strftime(timeStr, sizeof(timeStr), "%I:%M", timeinfo);
+  strftime(dateStr, sizeof(dateStr), "%d-%m-%Y", timeinfo);
 
   // Build JSON payload
   String jsonPayload = "{\"temperature\":" + String(temp) +
                        ",\"humidity\":" + String(humidity) +
-                       ",\"time\":\"" + hour12 +
-                       "\",\"date\":\"" + dateStr + "\"}";
+                       ",\"time\":\"" + String(timeStr) +
+                       "\",\"date\":\"" + String(dateStr) + "\"}";
 
   Serial.println("Sending to Firebase...");
   Serial.println(jsonPayload);
@@ -154,6 +142,6 @@ void sendToFirebase(float temp, float humidity) {
   } else {
     Serial.printf("Firebase error: %d\n", httpCode);
   }
-  
+
   http.end();
 }

@@ -3,10 +3,10 @@
 #include <DHT.h>
 
 #define DHTPIN 4        // GPIO pin connected to DHT22
-#define DHTTYPE DHT11    // DHT 22 (AM2302)
+#define DHTTYPE DHT11    
 #define WIFI_SSID "NTU FSD"
 #define WIFI_PASSWORD ""
-#define MQTT_SERVER "10.13.47.88"  // Replace with your Windows PC's IP address on LAN
+#define MQTT_SERVER "10.13.43.95"  // Replace with your Windows PC's IP address on LAN
 #define MQTT_PORT 1883
 
 DHT dht(DHTPIN, DHTTYPE);

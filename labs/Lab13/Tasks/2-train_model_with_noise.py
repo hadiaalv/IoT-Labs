@@ -25,23 +25,23 @@ def generate_data(samples=15000):
         if r < 0.2:
             temp = random.uniform(20, 28)
             hum = random.uniform(40, 60)
-            label = 0
+            label = 0 # Normal
         elif r < 0.4:
             temp = random.uniform(29, 40)
             hum = random.uniform(61, 90)
-            label = 1
+            label = 1# Hot and Humid
         elif r < 0.6:
             temp = random.uniform(5, 17)
             hum = random.uniform(10, 39)
-            label = 2
+            label = 2 # Cold and Dry
         elif r < 0.8:
             temp = random.uniform(29, 40)
             hum = random.uniform(10, 39)
-            label = 3
+            label = 3 # Hot and Dry
         else:
             temp = random.uniform(5, 17)
             hum = random.uniform(61, 90)
-            label = 4
+            label = 4 # Cold and Humid
 
         # Add noise
         temp += np.random.normal(0, 0.5)
